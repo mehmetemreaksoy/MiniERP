@@ -113,16 +113,20 @@ Hedef:
 
 ## 7. Edit ve Delete İşlemlerinin Modal Olması
 
-Şu an Edit ve Delete işlemleri ayrı sayfalarda açılıyor.
+Durum: Beklemede.
+
+Liste ekranları modernleştirildi ancak Edit ve Delete işlemleri hâlâ ayrı sayfalarda açılıyor.
 
 İleride bu işlemler modal/popup üzerinden yapılacak.
 
 Hedef:
 
-* Edit modal içinde açılsın
-* Delete onayı modal içinde gösterilsin
-* Kullanıcı liste ekranından ayrılmadan işlem yapabilsin
-
+- Kullanıcı liste ekranından ayrılmadan düzenleme yapabilsin.
+- Silme işlemi ayrı sayfa yerine onay modalı ile yapılsın.
+- Edit modalı form alanlarını aynı ekranda göstersin.
+- Modal tasarımı dashboard ve liste ekranlarıyla uyumlu olsun.
+- Backend controller/action isimleri İngilizce kalacak.
+- Kullanıcının gördüğü metinler Türkçe olacak.
 ---
 
 ## 8. Satış Silme ve Stok Geri Alma Mantığı

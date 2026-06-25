@@ -1,42 +1,53 @@
 @model List<Product>
 
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "Ürünler";
 }
 
-<h1>Products</h1>
+<div class="list-page-header">
+    <div>
+        <span class="panel-label">Stok Yönetimi</span>
+        <h2>Ürünler</h2>
+        <p>Stokta takip edilen ürünleri, fiyatları ve kritik stok seviyelerini yönetin.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">Yeni Ekle</a>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Product</a>
-</p>
-
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Critical Stock</th>
-            <th>Created Date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model)
-        {
-            <tr>
-                <td>@product.Name</td>
-                <td>@product.Category?.Name</td>
-                <td>@product.Price</td>
-                <td>@product.StockQuantity</td>
-                <td>@product.CriticalStockLevel</td>
-                <td>@product.CreatedDate.ToShortDateString()</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="panel-card">
+    <div class="table-responsive">
+        <table class="table erp-table mb-0">
+            <thead>
+                <tr>
+                    <th>Ürün Adı</th>
+                    <th>Kategori</th>
+                    <th>Fiyat</th>
+                    <th>Stok</th>
+                    <th>Kritik Stok</th>
+                    <th>Oluşturma Tarihi</th>
+                    <th class="text-end">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td><strong>@product.Name</strong></td>
+                        <td>@product.Category?.Name</td>
+                        <td>@product.Price.ToString("N2")</td>
+                        <td>
+                            <span class="status-pill @(product.StockQuantity <= product.CriticalStockLevel ? "danger" : "success")">
+                                @product.StockQuantity
+                            </span>
+                        </td>
+                        <td>@product.CriticalStockLevel</td>
+                        <td>@product.CreatedDate.ToShortDateString()</td>
+                        <td class="text-end">
+                            <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
+                            <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

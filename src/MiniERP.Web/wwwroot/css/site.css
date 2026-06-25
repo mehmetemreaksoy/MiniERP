@@ -279,6 +279,32 @@ body {
   padding: 22px;
 }
 
+.list-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.list-page-header h2 {
+  margin: 4px 0 6px;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.list-page-header p {
+  margin: 0;
+  color: var(--erp-muted);
+}
+
+.list-page-header .btn {
+  flex: 0 0 auto;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 800;
+}
+
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -309,6 +335,11 @@ body {
   border-color: #edf2f7;
   padding-top: 0.95rem;
   padding-bottom: 0.95rem;
+}
+
+.erp-table .btn-sm {
+  border-radius: 8px;
+  font-weight: 700;
 }
 
 .status-pill {

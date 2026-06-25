@@ -1,39 +1,50 @@
 @model List<StockMovement>
 
 @{
-    ViewData["Title"] = "Stock Movements";
+    ViewData["Title"] = "Stok Hareketleri";
 }
 
-<h1>Stock Movements</h1>
+<div class="list-page-header">
+    <div>
+        <span class="panel-label">Depo Operasyonları</span>
+        <h2>Stok Hareketleri</h2>
+        <p>Ürün giriş ve çıkış hareketlerini takip edin.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">Yeni Ekle</a>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Stock Movement</a>
-</p>
-
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Movement Type</th>
-            <th>Quantity</th>
-            <th>Description</th>
-            <th>Movement Date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var stockMovement in Model)
-        {
-            <tr>
-                <td>@stockMovement.Product?.Name</td>
-                <td>@stockMovement.MovementType</td>
-                <td>@stockMovement.Quantity</td>
-                <td>@stockMovement.Description</td>
-                <td>@stockMovement.MovementDate.ToShortDateString()</td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@stockMovement.Id" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="panel-card">
+    <div class="table-responsive">
+        <table class="table erp-table mb-0">
+            <thead>
+                <tr>
+                    <th>Ürün</th>
+                    <th>Hareket Tipi</th>
+                    <th>Miktar</th>
+                    <th>Açıklama</th>
+                    <th>Hareket Tarihi</th>
+                    <th class="text-end">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stockMovement in Model)
+                {
+                    <tr>
+                        <td><strong>@stockMovement.Product?.Name</strong></td>
+                        <td>
+                            <span class="status-pill @(stockMovement.MovementType == "In" ? "success" : "warning")">
+                                @(stockMovement.MovementType == "In" ? "Giriş" : "Çıkış")
+                            </span>
+                        </td>
+                        <td>@stockMovement.Quantity</td>
+                        <td>@stockMovement.Description</td>
+                        <td>@stockMovement.MovementDate.ToShortDateString()</td>
+                        <td class="text-end">
+                            <a asp-action="Delete" asp-route-id="@stockMovement.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

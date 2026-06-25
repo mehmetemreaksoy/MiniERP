@@ -1,40 +1,47 @@
 @model List<Customer>
 
 @{
-    ViewData["Title"] = "Customers";
+    ViewData["Title"] = "Cariler";
 }
 
-<h1>Customers</h1>
+<div class="list-page-header">
+    <div>
+        <span class="panel-label">Cari Yönetimi</span>
+        <h2>Cariler</h2>
+        <p>Müşteri ve firma bilgilerini tek ekrandan yönetin.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">Yeni Ekle</a>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Customer</a>
-</p>
-
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Created Date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var customer in Model)
-        {
-            <tr>
-                <td>@customer.Name</td>
-                <td>@customer.Email</td>
-                <td>@customer.Phone</td>
-                <td>@customer.Address</td>
-                <td>@customer.CreatedDate.ToShortDateString()</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@customer.Id" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@customer.Id" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="panel-card">
+    <div class="table-responsive">
+        <table class="table erp-table mb-0">
+            <thead>
+                <tr>
+                    <th>Cari Adı</th>
+                    <th>E-posta</th>
+                    <th>Telefon</th>
+                    <th>Adres</th>
+                    <th>Oluşturma Tarihi</th>
+                    <th class="text-end">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model)
+                {
+                    <tr>
+                        <td><strong>@customer.Name</strong></td>
+                        <td>@customer.Email</td>
+                        <td>@customer.Phone</td>
+                        <td>@customer.Address</td>
+                        <td>@customer.CreatedDate.ToShortDateString()</td>
+                        <td class="text-end">
+                            <a asp-action="Edit" asp-route-id="@customer.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
+                            <a asp-action="Delete" asp-route-id="@customer.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
