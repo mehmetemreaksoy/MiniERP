@@ -1,0 +1,41 @@
+@model List<Sale>
+
+@{
+    ViewData["Title"] = "Sales";
+}
+
+<h1>Sales</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Sale</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total Price</th>
+            <th>Sale Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sale in Model)
+        {
+            <tr>
+                <td>@sale.Customer?.Name</td>
+                <td>@sale.Product?.Name</td>
+                <td>@sale.Quantity</td>
+                <td>@sale.UnitPrice</td>
+                <td>@sale.TotalPrice</td>
+                <td>@sale.SaleDate.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@sale.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

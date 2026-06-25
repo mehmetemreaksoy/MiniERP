@@ -1,0 +1,186 @@
+@model MiniERP.Web.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<section class="dashboard-hero mb-4">
+    <div>
+        <span class="dashboard-kicker">Automotive ERP</span>
+        <h2>Good work starts with a clear dashboard.</h2>
+        <p>Track products, customers, stock flow and sales from one professional operations screen.</p>
+    </div>
+    <div class="dashboard-hero-metric">
+        <span>Critical Stock</span>
+        <strong>@Model.CriticalStockProductCount</strong>
+    </div>
+</section>
+
+<section class="row g-3 mb-4">
+    <div class="col-md-6 col-xl-3">
+        <div class="metric-card">
+            <span>Categories</span>
+            <strong>@Model.TotalCategories</strong>
+            <small>Product groups</small>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="metric-card">
+            <span>Products</span>
+            <strong>@Model.TotalProducts</strong>
+            <small>Stock tracked items</small>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="metric-card">
+            <span>Customers</span>
+            <strong>@Model.TotalCustomers</strong>
+            <small>Current accounts</small>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="metric-card">
+            <span>Sales</span>
+            <strong>@Model.TotalSales</strong>
+            <small>Recorded sales</small>
+        </div>
+    </div>
+</section>
+
+<section class="row g-4">
+    <div class="col-xl-4">
+        <div class="panel-card h-100">
+            <div class="panel-header">
+                <div>
+                    <span class="panel-label">Inventory Risk</span>
+                    <h3>Critical Stock Products</h3>
+                </div>
+                <span class="status-pill danger">@Model.CriticalStockProductCount</span>
+            </div>
+
+            @if (Model.CriticalStockProducts.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table erp-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Stock</th>
+                                <th>Limit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model.CriticalStockProducts)
+                            {
+                                <tr>
+                                    <td>@product.Name</td>
+                                    <td><span class="status-pill danger">@product.StockQuantity</span></td>
+                                    <td>@product.CriticalStockLevel</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="empty-state">No products are under the critical stock limit.</p>
+            }
+        </div>
+    </div>
+
+    <div class="col-xl-8">
+        <div class="panel-card h-100">
+            <div class="panel-header">
+                <div>
+                    <span class="panel-label">Commercial Flow</span>
+                    <h3>Recent Sales</h3>
+                </div>
+            </div>
+
+            @if (Model.RecentSales.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table erp-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var sale in Model.RecentSales)
+                            {
+                                <tr>
+                                    <td>@sale.Customer?.Name</td>
+                                    <td>@sale.Product?.Name</td>
+                                    <td>@sale.Quantity</td>
+                                    <td>@sale.UnitPrice</td>
+                                    <td><strong>@sale.TotalPrice</strong></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="empty-state">No sales have been recorded yet.</p>
+            }
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="panel-card">
+            <div class="panel-header">
+                <div>
+                    <span class="panel-label">Warehouse Activity</span>
+                    <h3>Recent Stock Movements</h3>
+                </div>
+            </div>
+
+            @if (Model.RecentStockMovements.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table erp-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Type</th>
+                                <th>Quantity</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var movement in Model.RecentStockMovements)
+                            {
+                                <tr>
+                                    <td>@movement.Product?.Name</td>
+                                    <td>
+                                        <span class="status-pill @(movement.MovementType == "In" ? "success" : "warning")">
+                                            @movement.MovementType
+                                        </span>
+                                    </td>
+                                    <td>@movement.Quantity</td>
+                                    <td>@movement.MovementDate.ToShortDateString()</td>
+                                    <td>@movement.Description</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="empty-state">No stock movements have been recorded yet.</p>
+            }
+        </div>
+    </div>
+</section>

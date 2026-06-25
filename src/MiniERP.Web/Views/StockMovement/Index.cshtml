@@ -1,0 +1,39 @@
+@model List<StockMovement>
+
+@{
+    ViewData["Title"] = "Stock Movements";
+}
+
+<h1>Stock Movements</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Stock Movement</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Movement Type</th>
+            <th>Quantity</th>
+            <th>Description</th>
+            <th>Movement Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var stockMovement in Model)
+        {
+            <tr>
+                <td>@stockMovement.Product?.Name</td>
+                <td>@stockMovement.MovementType</td>
+                <td>@stockMovement.Quantity</td>
+                <td>@stockMovement.Description</td>
+                <td>@stockMovement.MovementDate.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@stockMovement.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

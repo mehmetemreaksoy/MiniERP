@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MiniERP</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MiniERP.Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="erp-shell">
+        <aside class="erp-sidebar">
+            <a class="erp-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <span class="erp-brand-mark">M</span>
+                <span>
+                    <strong>MiniERP</strong>
+                    <small>Automotive</small>
+                </span>
+            </a>
+
+            <nav class="erp-nav">
+                <a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                <a asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+                <a asp-area="" asp-controller="Product" asp-action="Index">Products</a>
+                <a asp-area="" asp-controller="Customer" asp-action="Index">Customers</a>
+                <a asp-area="" asp-controller="StockMovement" asp-action="Index">Stock Movements</a>
+                <a asp-area="" asp-controller="Sale" asp-action="Index">Sales</a>
+            </nav>
+        </aside>
+
+        <div class="erp-main">
+            <header class="erp-topbar">
+                <div>
+                    <p class="erp-eyebrow mb-1">Operations Console</p>
+                    <h1 class="erp-page-title">@ViewData["Title"]</h1>
+                </div>
+                <div class="erp-user">
+                    <span class="erp-user-dot"></span>
+                    Admin
+                </div>
+            </header>
+
+            <main role="main" class="erp-content">
+                @RenderBody()
+            </main>
+
+            <footer class="erp-footer">
+                MiniERP Admin Panel
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
