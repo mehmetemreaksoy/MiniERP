@@ -330,3 +330,27 @@ Zorlandığım yer:
 Sonraki adım:
 
 Login sistemi sonrası projeyi commit edip GitHub’a pushlamak.
+
+### 2026-06-25
+
+Konu:
+
+Login erişim mantığı düzeltmesi
+
+Yapılan işlem:
+
+Dashboard dahil tüm ERP ekranları için login zorunlu hale getirildi. Login ekranı admin panel layoutundan ayrıldı.
+
+Ne öğrendim?
+
+Bir ERP sisteminde dashboard da sistemin parçasıdır ve login olmadan erişilmemelidir.
+
+Login ekranı, admin panel layoutundan bağımsız olmalıdır. Sidebar ve header sadece giriş yapmış kullanıcıya gösterilmelidir.
+
+Zorlandığım yer:
+
+İlk login sisteminde dashboard açık kalmıştı ve login ekranında sidebar görünüyordu. Bu mantık hatası düzeltildi.
+
+Sonraki adım:
+
+Değişiklikleri commit edip GitHub’a pushlamak.
