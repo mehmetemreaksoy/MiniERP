@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using MiniERP.Web.Data;
 using MiniERP.Web.Models;
 
@@ -11,6 +12,16 @@ public class CustomerController : Controller
     public CustomerController(AppDbContext context)
     {
         _context = context;
+    }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        if (HttpContext.Session.GetString("IsAdmin") != "true")
+        {
+            context.Result = RedirectToAction("Login", "Account");
+        }
+
+        base.OnActionExecuting(context);
     }
 
     public IActionResult Index()

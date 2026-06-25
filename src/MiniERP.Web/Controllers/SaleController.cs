@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MiniERP.Web.Data;
@@ -13,6 +14,16 @@ public class SaleController : Controller
     public SaleController(AppDbContext context)
     {
         _context = context;
+    }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        if (HttpContext.Session.GetString("IsAdmin") != "true")
+        {
+            context.Result = RedirectToAction("Login", "Account");
+        }
+
+        base.OnActionExecuting(context);
     }
 
     public IActionResult Index()

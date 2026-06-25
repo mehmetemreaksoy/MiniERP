@@ -288,3 +288,45 @@ Zorlandığım yer:
 Sonraki adım:
 
 Mevcut ekranları şimdilik koruyup, ileride toplu UI refactor aşamasında Türkçeleştirme, modern tablo yapısı ve modal edit/delete işlemlerini yapmak.
+
+### 2026-06-25
+
+Konu:
+
+Admin Login sistemi
+
+Yapılan işlem:
+
+MiniERP projesine basit session tabanlı admin login sistemi eklendi.
+
+Değişen dosyalar:
+
+- Controllers/AccountController.cs
+- Views/Account/Login.cshtml
+- Program.cs
+- Views/Shared/_Layout.cshtml
+- CategoryController.cs
+- ProductController.cs
+- CustomerController.cs
+- StockMovementController.cs
+- SaleController.cs
+
+Ne öğrendim?
+
+Session kullanılarak kullanıcının giriş durumu geçici olarak tutulabilir.
+
+Login başarılı olursa session içine IsAdmin değeri yazılır.
+
+Logout işleminde session temizlenir.
+
+Controller tarafında giriş kontrolü yapılarak yetkisiz kullanıcılar login ekranına yönlendirilebilir.
+
+Bu sistem ASP.NET Identity kadar gelişmiş değildir ama temel authentication mantığını öğrenmek için uygundur.
+
+Zorlandığım yer:
+
+Şimdilik kullanıcı adı ve şifre sabit tutuldu. İleride bu yapı veritabanı veya ASP.NET Identity ile geliştirilecek.
+
+Sonraki adım:
+
+Login sistemi sonrası projeyi commit edip GitHub’a pushlamak.

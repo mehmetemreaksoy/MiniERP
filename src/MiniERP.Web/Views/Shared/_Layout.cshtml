@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Http
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,10 +37,18 @@
                     <p class="erp-eyebrow mb-1">Operations Console</p>
                     <h1 class="erp-page-title">@ViewData["Title"]</h1>
                 </div>
-                <div class="erp-user">
-                    <span class="erp-user-dot"></span>
-                    Admin
-                </div>
+                @if (Context.Session.GetString("IsAdmin") == "true")
+                {
+                    <div class="erp-user">
+                        <span class="erp-user-dot"></span>
+                        Admin
+                        <a asp-controller="Account" asp-action="Logout" class="erp-auth-link">Logout</a>
+                    </div>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="erp-login-link">Login</a>
+                }
             </header>
 
             <main role="main" class="erp-content">

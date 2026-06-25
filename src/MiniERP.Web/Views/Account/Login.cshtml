@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="login-page">
+    <div class="login-card">
+        <div class="login-brand">
+            <span class="erp-brand-mark">M</span>
+            <div>
+                <h2>MiniERP Admin</h2>
+                <p>Sign in to manage operations.</p>
+            </div>
+        </div>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <form asp-action="Login" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input id="username" name="username" class="form-control" autocomplete="username" />
+            </div>
+
+            <div class="mb-4">
+                <label for="password" class="form-label">Password</label>
+                <input id="password" name="password" type="password" class="form-control" autocomplete="current-password" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+    </div>
+</div>
