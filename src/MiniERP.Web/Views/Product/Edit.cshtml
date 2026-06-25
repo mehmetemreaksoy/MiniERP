@@ -24,7 +24,14 @@
 
     <div class="mb-3">
         <label asp-for="Price" class="form-label"></label>
-        <input asp-for="Price" class="form-control" />
+        <input
+            id="Price"
+            name="Price"
+            class="form-control"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            value="@Model.Price.ToString("N2", new System.Globalization.CultureInfo("tr-TR"))" />
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
 

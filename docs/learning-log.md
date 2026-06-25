@@ -354,3 +354,35 @@ Zorlandığım yer:
 Sonraki adım:
 
 Değişiklikleri commit edip GitHub’a pushlamak.
+
+### 2026-06-25
+
+Konu:
+
+Product Price decimal/culture hatası düzeltmesi
+
+Yapılan işlem:
+
+Product Create ve Edit ekranlarında Price alanında Türkçe decimal formatından kaynaklanan hata düzeltildi.
+
+Ne öğrendim?
+
+Türkçe sistemlerde decimal değerler virgül ile gösterilebilir.
+
+Örnek:
+
+450,00
+
+Ancak HTML input ve backend model binding ayarları doğru yapılmazsa bu değer yanlış yorumlanabilir.
+
+Bu hata sonucunda 450,00 değeri 45000,00 gibi yanlış kaydedilebiliyordu.
+
+Uygulama culture ayarı ve Price input yapısı düzeltilerek fiyat değerlerinin doğru kaydedilmesi sağlandı.
+
+Zorlandığım yer:
+
+İlk başta sorun sadece input tipi gibi görünüyordu, fakat asıl problemin culture/model binding uyumsuzluğu olduğu anlaşıldı.
+
+Sonraki adım:
+
+Decimal precision uyarılarını düzeltmek.

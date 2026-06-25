@@ -8,14 +8,13 @@ Amaç, mevcut çalışan sistemi bozmadan eksikleri kayıt altına almak ve uygu
 
 ## 1. Product Edit Decimal Hatası
 
-Product Edit ekranında Price alanında şu hata görülebiliyor:
+Durum: Çözüldü.
 
-"The field Price must be a number."
+Product Create/Edit ekranlarında Türkçe decimal formatından kaynaklanan Price hatası giderildi.
 
-Muhtemel sebep Türkçe virgül formatı ile HTML number input formatının farklı çalışmasıdır.
+450,00 değerinin 45000,00 olarak kaydedilmesi problemi düzeltildi.
 
-İleride decimal culture/format ayarı düzenlenecek.
-
+Şimdilik tekrar işlem yapılmayacak.
 ---
 
 ## 2. Decimal Precision Uyarıları

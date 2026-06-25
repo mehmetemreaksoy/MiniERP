@@ -18,4 +18,19 @@ public class AppDbContext : DbContext
     public DbSet<StockMovement> StockMovements { get; set; }
 
     public DbSet<Sale> Sales { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>()
+            .Property(p => p.Price)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<Sale>()
+            .Property(s => s.UnitPrice)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<Sale>()
+            .Property(s => s.TotalPrice)
+            .HasPrecision(18, 2);
+    }
 }
