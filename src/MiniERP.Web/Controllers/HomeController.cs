@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using MiniERP.Web.Data;
@@ -7,6 +8,7 @@ using MiniERP.Web.ViewModels;
 
 namespace MiniERP.Web.Controllers;
 
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -20,11 +22,6 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        if (HttpContext.Session.GetString("IsAdmin") != "true")
-        {
-            return RedirectToAction("Login", "Account");
-        }
-
         var dashboard = new DashboardViewModel
         {
             TotalCategories = _context.Categories.Count(),

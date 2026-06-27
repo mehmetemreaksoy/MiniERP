@@ -1,9 +1,19 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MiniERP.Web.Controllers;
 
 public class AccountController : Controller
 {
+    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<IdentityUser> _userManager;
+
+    public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+    {
+        _signInManager = signInManager;
+        _userManager = userManager;
+    }
+
     public IActionResult Login()
     {
         return View();
@@ -11,21 +21,23 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Login(string username, string password)
+    public async Task<IActionResult> Login(string userName, string password)
     {
-        if (username == "admin" && password == "Admin123")
+        var result = await _signInManager.PasswordSignInAsync(userName, password, isPersistent: false, lockoutOnFailure: false);
+
+        if (result.Succeeded)
         {
-            HttpContext.Session.SetString("IsAdmin", "true");
             return RedirectToAction("Index", "Home");
         }
 
-        ViewBag.ErrorMessage = "Username or password is incorrect.";
+        ViewBag.ErrorMessage = "Kullanıcı adı veya şifre hatalı.";
         return View();
     }
 
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()
     {
-        HttpContext.Session.Clear();
+        await _signInManager.SignOutAsync();
+
         return RedirectToAction(nameof(Login));
     }
 }
