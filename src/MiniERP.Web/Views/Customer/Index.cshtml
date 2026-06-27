@@ -36,8 +36,8 @@
                         <td>@customer.Address</td>
                         <td>@customer.CreatedDate.ToShortDateString()</td>
                         <td class="text-end">
-                            <a asp-action="Edit" asp-route-id="@customer.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
-                            <a asp-action="Delete" asp-route-id="@customer.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editCustomerModal-@customer.Id">Düzenle</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteCustomerModal-@customer.Id">Sil</button>
                         </td>
                     </tr>
                 }
@@ -45,3 +45,71 @@
         </table>
     </div>
 </div>
+
+@foreach (var customer in Model)
+{
+    <div class="modal fade" id="editCustomerModal-@customer.Id" tabindex="-1" aria-labelledby="editCustomerModalLabel-@customer.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <form asp-action="Edit" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCustomerModalLabel-@customer.Id">Cari Düzenle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="Id" value="@customer.Id" />
+                        <input type="hidden" name="CreatedDate" value="@customer.CreatedDate" />
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="customerName-@customer.Id" class="form-label">Cari Adı</label>
+                                <input id="customerName-@customer.Id" name="Name" class="form-control" value="@customer.Name" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="customerEmail-@customer.Id" class="form-label">E-posta</label>
+                                <input id="customerEmail-@customer.Id" name="Email" class="form-control" value="@customer.Email" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="customerPhone-@customer.Id" class="form-label">Telefon</label>
+                                <input id="customerPhone-@customer.Id" name="Phone" class="form-control" value="@customer.Phone" />
+                            </div>
+
+                            <div class="col-12">
+                                <label for="customerAddress-@customer.Id" class="form-label">Adres</label>
+                                <textarea id="customerAddress-@customer.Id" name="Address" class="form-control">@customer.Address</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteCustomerModal-@customer.Id" tabindex="-1" aria-labelledby="deleteCustomerModalLabel-@customer.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-action="Delete" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteCustomerModalLabel-@customer.Id">Cari Sil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="@customer.Id" />
+                        <p class="mb-1">Bu cariyi silmek istediğinize emin misiniz?</p>
+                        <strong>@customer.Name</strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

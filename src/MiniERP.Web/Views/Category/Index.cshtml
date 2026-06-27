@@ -32,8 +32,8 @@
                         <td>@category.Description</td>
                         <td>@category.CreatedDate.ToShortDateString()</td>
                         <td class="text-end">
-                            <a asp-action="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
-                            <a asp-action="Delete" asp-route-id="@category.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editCategoryModal-@category.Id">Düzenle</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal-@category.Id">Sil</button>
                         </td>
                     </tr>
                 }
@@ -41,3 +41,59 @@
         </table>
     </div>
 </div>
+
+@foreach (var category in Model)
+{
+    <div class="modal fade" id="editCategoryModal-@category.Id" tabindex="-1" aria-labelledby="editCategoryModalLabel-@category.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-action="Edit" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCategoryModalLabel-@category.Id">Kategori Düzenle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="Id" value="@category.Id" />
+                        <input type="hidden" name="CreatedDate" value="@category.CreatedDate" />
+
+                        <div class="mb-3">
+                            <label for="categoryName-@category.Id" class="form-label">Kategori Adı</label>
+                            <input id="categoryName-@category.Id" name="Name" class="form-control" value="@category.Name" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="categoryDescription-@category.Id" class="form-label">Açıklama</label>
+                            <textarea id="categoryDescription-@category.Id" name="Description" class="form-control">@category.Description</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteCategoryModal-@category.Id" tabindex="-1" aria-labelledby="deleteCategoryModalLabel-@category.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-action="Delete" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteCategoryModalLabel-@category.Id">Kategori Sil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="@category.Id" />
+                        <p class="mb-1">Bu kategoriyi silmek istediğinize emin misiniz?</p>
+                        <strong>@category.Name</strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

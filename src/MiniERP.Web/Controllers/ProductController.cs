@@ -29,6 +29,8 @@ public class ProductController : Controller
     public IActionResult Index()
     {
         var products = _context.Products.Include(p => p.Category).ToList();
+        LoadCategories();
+
         return View(products);
     }
 

@@ -40,7 +40,7 @@
                         <td>@stockMovement.Description</td>
                         <td>@stockMovement.MovementDate.ToShortDateString()</td>
                         <td class="text-end">
-                            <a asp-action="Delete" asp-route-id="@stockMovement.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteStockMovementModal-@stockMovement.Id">Sil</button>
                         </td>
                     </tr>
                 }
@@ -48,3 +48,28 @@
         </table>
     </div>
 </div>
+
+@foreach (var stockMovement in Model)
+{
+    <div class="modal fade" id="deleteStockMovementModal-@stockMovement.Id" tabindex="-1" aria-labelledby="deleteStockMovementModalLabel-@stockMovement.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-action="Delete" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteStockMovementModalLabel-@stockMovement.Id">Stok Hareketi Sil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="@stockMovement.Id" />
+                        <p class="mb-1">Bu stok hareketini silmek istediğinize emin misiniz?</p>
+                        <strong>@stockMovement.Product?.Name - @(stockMovement.MovementType == "In" ? "Giriş" : "Çıkış") / @stockMovement.Quantity</strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

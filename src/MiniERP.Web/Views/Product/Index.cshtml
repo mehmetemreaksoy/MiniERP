@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model List<Product>
 
 @{
@@ -42,8 +43,8 @@
                         <td>@product.CriticalStockLevel</td>
                         <td>@product.CreatedDate.ToShortDateString()</td>
                         <td class="text-end">
-                            <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
-                            <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProductModal-@product.Id">Düzenle</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal-@product.Id">Sil</button>
                         </td>
                     </tr>
                 }
@@ -51,3 +52,86 @@
         </table>
     </div>
 </div>
+
+@foreach (var product in Model)
+{
+    <div class="modal fade" id="editProductModal-@product.Id" tabindex="-1" aria-labelledby="editProductModalLabel-@product.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <form asp-action="Edit" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editProductModalLabel-@product.Id">Ürün Düzenle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="Id" value="@product.Id" />
+                        <input type="hidden" name="CreatedDate" value="@product.CreatedDate" />
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="productName-@product.Id" class="form-label">Ürün Adı</label>
+                                <input id="productName-@product.Id" name="Name" class="form-control" value="@product.Name" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="productCategory-@product.Id" class="form-label">Kategori</label>
+                                <select id="productCategory-@product.Id" name="CategoryId" class="form-select">
+                                    @foreach (SelectListItem category in ViewBag.Categories)
+                                    {
+                                        <option value="@category.Value" selected="@(category.Value == product.CategoryId.ToString() ? "selected" : null)">@category.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="productPrice-@product.Id" class="form-label">Fiyat</label>
+                                <input id="productPrice-@product.Id" name="Price" class="form-control" type="text" inputmode="decimal" autocomplete="off" value="@product.Price.ToString("N2")" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="productStock-@product.Id" class="form-label">Stok</label>
+                                <input id="productStock-@product.Id" name="StockQuantity" class="form-control" value="@product.StockQuantity" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="productCriticalStock-@product.Id" class="form-label">Kritik Stok</label>
+                                <input id="productCriticalStock-@product.Id" name="CriticalStockLevel" class="form-control" value="@product.CriticalStockLevel" />
+                            </div>
+
+                            <div class="col-12">
+                                <label for="productDescription-@product.Id" class="form-label">Açıklama</label>
+                                <textarea id="productDescription-@product.Id" name="Description" class="form-control">@product.Description</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteProductModal-@product.Id" tabindex="-1" aria-labelledby="deleteProductModalLabel-@product.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-action="Delete" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteProductModalLabel-@product.Id">Ürün Sil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="@product.Id" />
+                        <p class="mb-1">Bu ürünü silmek istediğinize emin misiniz?</p>
+                        <strong>@product.Name</strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

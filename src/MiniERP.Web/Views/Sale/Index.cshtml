@@ -38,7 +38,7 @@
                         <td><strong>@sale.TotalPrice.ToString("N2")</strong></td>
                         <td>@sale.SaleDate.ToShortDateString()</td>
                         <td class="text-end">
-                            <a asp-action="Delete" asp-route-id="@sale.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteSaleModal-@sale.Id">Sil</button>
                         </td>
                     </tr>
                 }
@@ -46,3 +46,28 @@
         </table>
     </div>
 </div>
+
+@foreach (var sale in Model)
+{
+    <div class="modal fade" id="deleteSaleModal-@sale.Id" tabindex="-1" aria-labelledby="deleteSaleModalLabel-@sale.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-action="Delete" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteSaleModalLabel-@sale.Id">Satış Sil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="@sale.Id" />
+                        <p class="mb-1">Bu satış kaydını silmek istediğinize emin misiniz?</p>
+                        <strong>@sale.Customer?.Name - @sale.Product?.Name / @sale.TotalPrice.ToString("N2")</strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
