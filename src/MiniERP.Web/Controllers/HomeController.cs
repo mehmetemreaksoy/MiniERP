@@ -8,7 +8,7 @@ using MiniERP.Web.ViewModels;
 
 namespace MiniERP.Web.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin,Manager,Viewer")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

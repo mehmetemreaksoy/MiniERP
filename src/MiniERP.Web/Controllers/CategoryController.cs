@@ -5,7 +5,7 @@ using MiniERP.Web.Models;
 
 namespace MiniERP.Web.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class CategoryController : Controller
 {
     private readonly AppDbContext _context;

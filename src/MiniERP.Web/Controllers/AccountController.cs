@@ -40,4 +40,9 @@ public class AccountController : Controller
 
         return RedirectToAction(nameof(Login));
     }
+
+    public IActionResult AccessDenied()
+    {
+        return View();
+    }
 }

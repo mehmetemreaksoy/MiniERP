@@ -7,7 +7,7 @@ using MiniERP.Web.Models;
 
 namespace MiniERP.Web.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin,SalesUser")]
 public class SaleController : Controller
 {
     private readonly AppDbContext _context;

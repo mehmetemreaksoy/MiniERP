@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = "Yetkisiz Erişim";
+}
+
+<div class="panel-card">
+    <div class="panel-header">
+        <div>
+            <span class="panel-label">Yetki Kontrolü</span>
+            <h3>Bu sayfaya erişim yetkiniz yok.</h3>
+        </div>
+    </div>
+
+    <p class="text-muted mb-4">
+        Bu işlem için gerekli role sahip değilsiniz. Gerekli olduğunu düşünüyorsanız sistem yöneticinizle iletişime geçin.
+    </p>
+
+    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Ana Panele Dön</a>
+</div>

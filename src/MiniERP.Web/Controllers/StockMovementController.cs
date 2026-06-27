@@ -7,7 +7,7 @@ using MiniERP.Web.Models;
 
 namespace MiniERP.Web.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin,WarehouseUser")]
 public class StockMovementController : Controller
 {
     private readonly AppDbContext _context;
