@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MiniERP.Web.Data;
 using MiniERP.Web.Models;
+using MiniERP.Web.Services;
 
 namespace MiniERP.Web.Controllers;
 
@@ -11,10 +12,12 @@ namespace MiniERP.Web.Controllers;
 public class SaleController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly IAuditLogService _auditLogService;
 
-    public SaleController(AppDbContext context)
+    public SaleController(AppDbContext context, IAuditLogService auditLogService)
     {
         _context = context;
+        _auditLogService = auditLogService;
     }
 
     public IActionResult Index()
@@ -66,6 +69,12 @@ public class SaleController : Controller
         _context.Sales.Add(sale);
         _context.SaveChanges();
 
+        _auditLogService.Log(
+            "Create",
+            "Sale",
+            sale.Id,
+            "Satış oluşturuldu");
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -97,6 +106,12 @@ public class SaleController : Controller
 
         _context.Sales.Remove(sale);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Delete",
+            "Sale",
+            sale.Id,
+            "Satış silindi");
 
         return RedirectToAction(nameof(Index));
     }

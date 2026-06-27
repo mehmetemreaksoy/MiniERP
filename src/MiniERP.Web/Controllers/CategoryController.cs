@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MiniERP.Web.Data;
 using MiniERP.Web.Models;
+using MiniERP.Web.Services;
 
 namespace MiniERP.Web.Controllers;
 
@@ -9,10 +10,12 @@ namespace MiniERP.Web.Controllers;
 public class CategoryController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly IAuditLogService _auditLogService;
 
-    public CategoryController(AppDbContext context)
+    public CategoryController(AppDbContext context, IAuditLogService auditLogService)
     {
         _context = context;
+        _auditLogService = auditLogService;
     }
 
     public IActionResult Index()
@@ -37,6 +40,12 @@ public class CategoryController : Controller
 
         _context.Categories.Add(category);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Create",
+            "Category",
+            category.Id,
+            $"Kategori oluşturuldu: {category.Name}");
 
         return RedirectToAction(nameof(Index));
     }
@@ -64,6 +73,12 @@ public class CategoryController : Controller
 
         _context.Categories.Update(category);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Edit",
+            "Category",
+            category.Id,
+            $"Kategori güncellendi: {category.Name}");
 
         return RedirectToAction(nameof(Index));
     }
@@ -93,6 +108,12 @@ public class CategoryController : Controller
 
         _context.Categories.Remove(category);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Delete",
+            "Category",
+            category.Id,
+            $"Kategori silindi: {category.Name}");
 
         return RedirectToAction(nameof(Index));
     }

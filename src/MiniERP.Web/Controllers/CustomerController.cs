@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MiniERP.Web.Data;
 using MiniERP.Web.Models;
+using MiniERP.Web.Services;
 
 namespace MiniERP.Web.Controllers;
 
@@ -9,10 +10,12 @@ namespace MiniERP.Web.Controllers;
 public class CustomerController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly IAuditLogService _auditLogService;
 
-    public CustomerController(AppDbContext context)
+    public CustomerController(AppDbContext context, IAuditLogService auditLogService)
     {
         _context = context;
+        _auditLogService = auditLogService;
     }
 
     public IActionResult Index()
@@ -37,6 +40,12 @@ public class CustomerController : Controller
 
         _context.Customers.Add(customer);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Create",
+            "Customer",
+            customer.Id,
+            $"Cari oluşturuldu: {customer.Name}");
 
         return RedirectToAction(nameof(Index));
     }
@@ -64,6 +73,12 @@ public class CustomerController : Controller
 
         _context.Customers.Update(customer);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Edit",
+            "Customer",
+            customer.Id,
+            $"Cari güncellendi: {customer.Name}");
 
         return RedirectToAction(nameof(Index));
     }
@@ -93,6 +108,12 @@ public class CustomerController : Controller
 
         _context.Customers.Remove(customer);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Delete",
+            "Customer",
+            customer.Id,
+            $"Cari silindi: {customer.Name}");
 
         return RedirectToAction(nameof(Index));
     }

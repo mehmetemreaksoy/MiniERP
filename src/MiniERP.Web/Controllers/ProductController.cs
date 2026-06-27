@@ -51,7 +51,7 @@ public class ProductController : Controller
             "Create",
             "Product",
             product.Id,
-            $"Yeni ürün oluşturuldu: {product.Name}");
+            $"Ürün oluşturuldu: {product.Name}");
 
         return RedirectToAction(nameof(Index));
     }
@@ -81,6 +81,12 @@ public class ProductController : Controller
 
         _context.Products.Update(product);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Edit",
+            "Product",
+            product.Id,
+            $"Ürün güncellendi: {product.Name}");
 
         return RedirectToAction(nameof(Index));
     }
@@ -112,6 +118,12 @@ public class ProductController : Controller
 
         _context.Products.Remove(product);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Delete",
+            "Product",
+            product.Id,
+            $"Ürün silindi: {product.Name}");
 
         return RedirectToAction(nameof(Index));
     }

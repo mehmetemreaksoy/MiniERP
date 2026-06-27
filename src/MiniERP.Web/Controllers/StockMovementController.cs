@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MiniERP.Web.Data;
 using MiniERP.Web.Models;
+using MiniERP.Web.Services;
 
 namespace MiniERP.Web.Controllers;
 
@@ -11,10 +12,12 @@ namespace MiniERP.Web.Controllers;
 public class StockMovementController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly IAuditLogService _auditLogService;
 
-    public StockMovementController(AppDbContext context)
+    public StockMovementController(AppDbContext context, IAuditLogService auditLogService)
     {
         _context = context;
+        _auditLogService = auditLogService;
     }
 
     public IActionResult Index()
@@ -74,6 +77,12 @@ public class StockMovementController : Controller
         _context.StockMovements.Add(stockMovement);
         _context.SaveChanges();
 
+        _auditLogService.Log(
+            "Create",
+            "StockMovement",
+            stockMovement.Id,
+            "Stok hareketi oluşturuldu");
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -104,6 +113,12 @@ public class StockMovementController : Controller
 
         _context.StockMovements.Remove(stockMovement);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Delete",
+            "StockMovement",
+            stockMovement.Id,
+            "Stok hareketi silindi");
 
         return RedirectToAction(nameof(Index));
     }
