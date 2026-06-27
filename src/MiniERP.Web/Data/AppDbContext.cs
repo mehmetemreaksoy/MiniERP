@@ -20,6 +20,8 @@ public class AppDbContext : IdentityDbContext
 
     public DbSet<Sale> Sales { get; set; }
 
+    public DbSet<AuditLog> AuditLogs { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
