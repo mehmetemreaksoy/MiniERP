@@ -174,3 +174,21 @@ Mevcut çalışan ekranlar şimdilik bozulmayacak.
 UI düzenlemeleri tek tek değil, planlı bir refactor aşamasında yapılacak.
 
 Amaç Codex token/kredi kullanımını azaltmak ve çalışan sistemi gereksiz yere bozmamaktır.
+
+## Session Login Sisteminin Identity'ye Taşınması
+
+Durum: Planlanıyor.
+
+Mevcut sistemde admin login session tabanlıdır ve kullanıcı adı/şifre sabittir.
+
+Bu yapı kurumsal kullanım için yeterli değildir.
+
+Hedef:
+
+- ASP.NET Core Identity kullanmak
+- Kullanıcıları veritabanında tutmak
+- Şifreleri hashli saklamak
+- Admin, Manager, SalesUser, WarehouseUser, Viewer rolleri oluşturmak
+- Controller erişimlerini role bazlı yönetmek
+- Sabit admin şifresini kaldırmak
+- Login/logout işlemlerini Identity ile yapmak

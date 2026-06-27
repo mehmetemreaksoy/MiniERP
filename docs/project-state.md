@@ -47,3 +47,19 @@ Dashboard tasarımı beğenildi.
 Yeni ekranlar dashboard ve sidebar tasarımıyla uyumlu olmalıdır.
 
 Modern, sade, profesyonel ERP/admin panel görünümü korunmalıdır.
+
+## Kurumsal Hedef
+
+MiniERP projesi artık sadece eğitim amaçlı CRUD projesi olarak değil, kurumsal seviyeye taşınabilecek bir ERP sistemi olarak geliştirilecektir.
+
+Öncelikli kurumsal geliştirme alanları:
+
+- ASP.NET Identity ile gerçek kullanıcı yönetimi
+- Rol bazlı yetkilendirme
+- Güvenli şifre saklama
+- Audit log
+- Soft delete
+- Satış iptal/iade mantığı
+- Stok ve satış işlemlerinde veri bütünlüğü
+- Profesyonel raporlama
+- Deployment hazırlığı
