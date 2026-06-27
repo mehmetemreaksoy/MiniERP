@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MiniERP.Web.Data;
 using MiniERP.Web.Models;
+using MiniERP.Web.Services;
 
 namespace MiniERP.Web.Controllers;
 
@@ -11,10 +12,12 @@ namespace MiniERP.Web.Controllers;
 public class ProductController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly IAuditLogService _auditLogService;
 
-    public ProductController(AppDbContext context)
+    public ProductController(AppDbContext context, IAuditLogService auditLogService)
     {
         _context = context;
+        _auditLogService = auditLogService;
     }
 
     public IActionResult Index()
@@ -43,6 +46,12 @@ public class ProductController : Controller
 
         _context.Products.Add(product);
         _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Create",
+            "Product",
+            product.Id,
+            $"Yeni ürün oluşturuldu: {product.Name}");
 
         return RedirectToAction(nameof(Index));
     }
