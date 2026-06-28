@@ -15,4 +15,6 @@ public class Customer
     public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     public List<Sale> Sales { get; set; } = new();
+
+    public ICollection<SalesInvoice> SalesInvoices { get; set; } = new List<SalesInvoice>();
 }

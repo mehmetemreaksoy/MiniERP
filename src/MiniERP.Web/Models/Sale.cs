@@ -25,4 +25,6 @@ public class Sale
     public DateTime? CancelledDate { get; set; }
 
     public string? CancelReason { get; set; }
+
+    public SalesInvoice? SalesInvoice { get; set; }
 }
