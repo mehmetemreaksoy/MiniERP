@@ -1,0 +1,148 @@
+@model List<AuditLog>
+
+@{
+    ViewData["Title"] = "İşlem Geçmişi";
+    var auditLogs = Model ?? new List<AuditLog>();
+    var currentPage = ViewBag.CurrentPage as int? ?? 1;
+    var totalPages = ViewBag.TotalPages as int? ?? 0;
+    var totalCount = ViewBag.TotalCount as int? ?? 0;
+}
+
+<div class="list-page-header">
+    <div>
+        <span class="panel-label">Denetim Kayıtları</span>
+        <h2>İşlem Geçmişi</h2>
+        <p>Kullanıcıların sistemde yaptığı işlemleri tarih, kullanıcı, işlem ve modüle göre filtreleyin.</p>
+    </div>
+</div>
+
+<div class="panel-card mb-4">
+    <form asp-action="Index" method="get">
+        <div class="row g-3 align-items-end">
+            <div class="col-lg-3 col-md-6">
+                <label for="searchText" class="form-label">Genel Arama</label>
+                <input id="searchText" name="searchText" class="form-control" value="@ViewBag.SearchText" placeholder="Açıklama, kullanıcı, modül" />
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <label for="userName" class="form-label">Kullanıcı</label>
+                <input id="userName" name="userName" class="form-control" value="@ViewBag.UserName" />
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <label for="actionType" class="form-label">İşlem</label>
+                <select id="actionType" name="actionType" class="form-select">
+                    <option value="">Tümü</option>
+                    <option value="Create" selected="@(ViewBag.ActionType == "Create" ? "selected" : null)">Create</option>
+                    <option value="Edit" selected="@(ViewBag.ActionType == "Edit" ? "selected" : null)">Edit</option>
+                    <option value="Delete" selected="@(ViewBag.ActionType == "Delete" ? "selected" : null)">Delete</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <label for="entityName" class="form-label">Modül/Varlık</label>
+                <select id="entityName" name="entityName" class="form-select">
+                    <option value="">Tümü</option>
+                    <option value="Product" selected="@(ViewBag.EntityName == "Product" ? "selected" : null)">Product</option>
+                    <option value="Category" selected="@(ViewBag.EntityName == "Category" ? "selected" : null)">Category</option>
+                    <option value="Customer" selected="@(ViewBag.EntityName == "Customer" ? "selected" : null)">Customer</option>
+                    <option value="StockMovement" selected="@(ViewBag.EntityName == "StockMovement" ? "selected" : null)">StockMovement</option>
+                    <option value="Sale" selected="@(ViewBag.EntityName == "Sale" ? "selected" : null)">Sale</option>
+                </select>
+            </div>
+
+            <div class="col-lg-1 col-md-6">
+                <label for="startDate" class="form-label">Başlangıç</label>
+                <input id="startDate" name="startDate" type="date" class="form-control" value="@ViewBag.StartDate" />
+            </div>
+
+            <div class="col-lg-1 col-md-6">
+                <label for="endDate" class="form-label">Bitiş</label>
+                <input id="endDate" name="endDate" type="date" class="form-control" value="@ViewBag.EndDate" />
+            </div>
+
+            <div class="col-lg-1 col-md-6 d-grid">
+                <button type="submit" class="btn btn-primary">Filtrele</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="panel-card">
+    <div class="table-responsive">
+        <table class="table erp-table mb-0">
+            <thead>
+                <tr>
+                    <th>Tarih</th>
+                    <th>Kullanıcı</th>
+                    <th>İşlem</th>
+                    <th>Modül/Varlık</th>
+                    <th>Kayıt Id</th>
+                    <th>Açıklama</th>
+                    <th>IP Adresi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!auditLogs.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="empty-state">Kayıt bulunamadı.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var auditLog in auditLogs)
+                    {
+                        <tr>
+                            <td>@auditLog.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td><strong>@auditLog.UserName</strong></td>
+                            <td>@auditLog.Action</td>
+                            <td>@auditLog.EntityName</td>
+                            <td>@auditLog.EntityId</td>
+                            <td>@auditLog.Description</td>
+                            <td>@auditLog.IpAddress</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-3">
+        <span class="empty-state">Toplam @totalCount kayıt</span>
+
+        @if (totalPages > 1)
+        {
+            <nav aria-label="Audit log sayfaları">
+                <ul class="pagination mb-0">
+                    <li class="page-item @(currentPage <= 1 ? "disabled" : null)">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-page="@(currentPage - 1)"
+                           asp-route-searchText="@ViewBag.SearchText"
+                           asp-route-userName="@ViewBag.UserName"
+                           asp-route-actionType="@ViewBag.ActionType"
+                           asp-route-entityName="@ViewBag.EntityName"
+                           asp-route-startDate="@ViewBag.StartDate"
+                           asp-route-endDate="@ViewBag.EndDate">Önceki</a>
+                    </li>
+
+                    <li class="page-item disabled">
+                        <span class="page-link">@currentPage / @totalPages</span>
+                    </li>
+
+                    <li class="page-item @(currentPage >= totalPages ? "disabled" : null)">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-page="@(currentPage + 1)"
+                           asp-route-searchText="@ViewBag.SearchText"
+                           asp-route-userName="@ViewBag.UserName"
+                           asp-route-actionType="@ViewBag.ActionType"
+                           asp-route-entityName="@ViewBag.EntityName"
+                           asp-route-startDate="@ViewBag.StartDate"
+                           asp-route-endDate="@ViewBag.EndDate">Sonraki</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
+</div>

@@ -26,6 +26,10 @@
                 <a asp-area="" asp-controller="Customer" asp-action="Index">Cariler</a>
                 <a asp-area="" asp-controller="StockMovement" asp-action="Index">Stok Hareketleri</a>
                 <a asp-area="" asp-controller="Sale" asp-action="Index">Satışlar</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-area="" asp-controller="AuditLog" asp-action="Index">İşlem Geçmişi</a>
+                }
             </nav>
         </aside>
 
