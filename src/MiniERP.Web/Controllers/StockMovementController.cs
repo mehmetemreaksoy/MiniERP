@@ -25,6 +25,8 @@ public class StockMovementController : Controller
         var stockMovements = _context.StockMovements
             .Include(s => s.Product)
             .ToList();
+        LoadProducts();
+        LoadMovementTypes();
 
         return View(stockMovements);
     }

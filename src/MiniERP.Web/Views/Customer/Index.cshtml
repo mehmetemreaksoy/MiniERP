@@ -4,13 +4,8 @@
     ViewData["Title"] = "Cariler";
 }
 
-<div class="list-page-header">
-    <div>
-        <span class="panel-label">Cari Yönetimi</span>
-        <h2>Cariler</h2>
-        <p>Müşteri ve firma bilgilerini tek ekrandan yönetin.</p>
-    </div>
-    <a asp-action="Create" class="btn btn-primary">Yeni Ekle</a>
+<div class="list-page-header justify-content-end">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCustomerModal">Yeni Ekle</button>
 </div>
 
 <div class="panel-card">
@@ -43,6 +38,46 @@
                 }
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="modal fade" id="createCustomerModal" tabindex="-1" aria-labelledby="createCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createCustomerModalLabel">Yeni Cari</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="customerCreateName" class="form-label">Cari Adı</label>
+                            <input id="customerCreateName" name="Name" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="customerCreateEmail" class="form-label">E-posta</label>
+                            <input id="customerCreateEmail" name="Email" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="customerCreatePhone" class="form-label">Telefon</label>
+                            <input id="customerCreatePhone" name="Phone" class="form-control" />
+                        </div>
+
+                        <div class="col-12">
+                            <label for="customerCreateAddress" class="form-label">Adres</label>
+                            <textarea id="customerCreateAddress" name="Address" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

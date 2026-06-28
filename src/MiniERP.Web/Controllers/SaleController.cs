@@ -26,6 +26,8 @@ public class SaleController : Controller
             .Include(s => s.Customer)
             .Include(s => s.Product)
             .ToList();
+        LoadCustomers();
+        LoadProducts();
 
         return View(sales);
     }
@@ -56,6 +58,7 @@ public class SaleController : Controller
         {
             sale.UnitPrice = product.Price;
             sale.TotalPrice = sale.Quantity * sale.UnitPrice;
+            sale.Status = "Active";
             product.StockQuantity -= sale.Quantity;
         }
 
@@ -93,6 +96,59 @@ public class SaleController : Controller
         return View(sale);
     }
 
+    public IActionResult Cancel(int id)
+    {
+        var sale = _context.Sales
+            .Include(s => s.Customer)
+            .Include(s => s.Product)
+            .FirstOrDefault(s => s.Id == id);
+
+        if (sale == null)
+        {
+            return NotFound();
+        }
+
+        return View(sale);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Cancel(int id, string? cancelReason)
+    {
+        var sale = _context.Sales
+            .Include(s => s.Product)
+            .FirstOrDefault(s => s.Id == id);
+
+        if (sale == null)
+        {
+            return NotFound();
+        }
+
+        if (sale.Status == "Cancelled")
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        sale.Status = "Cancelled";
+        sale.CancelledDate = DateTime.Now;
+        sale.CancelReason = cancelReason;
+
+        if (sale.Product != null)
+        {
+            sale.Product.StockQuantity += sale.Quantity;
+        }
+
+        _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Cancel",
+            "Sale",
+            sale.Id,
+            "Satış iptal edildi. Stok geri eklendi.");
+
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int id)
@@ -123,6 +179,6 @@ public class SaleController : Controller
 
     private void LoadProducts()
     {
-        ViewBag.Products = new SelectList(_context.Products.ToList(), "Id", "Name");
+        ViewBag.Products = new SelectList(_context.Products.Where(p => !p.IsDeleted).ToList(), "Id", "Name");
     }
 }

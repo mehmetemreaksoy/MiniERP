@@ -8,14 +8,6 @@
     var totalCount = ViewBag.TotalCount as int? ?? 0;
 }
 
-<div class="list-page-header">
-    <div>
-        <span class="panel-label">Denetim Kayıtları</span>
-        <h2>İşlem Geçmişi</h2>
-        <p>Kullanıcıların sistemde yaptığı işlemleri tarih, kullanıcı, işlem ve modüle göre filtreleyin.</p>
-    </div>
-</div>
-
 <div class="panel-card mb-4">
     <form asp-action="Index" method="get">
         <div class="row g-3 align-items-end">

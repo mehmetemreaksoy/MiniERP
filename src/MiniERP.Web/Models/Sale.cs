@@ -19,4 +19,10 @@ public class Sale
     public decimal TotalPrice { get; set; }
 
     public DateTime SaleDate { get; set; } = DateTime.Now;
+
+    public string Status { get; set; } = "Active";
+
+    public DateTime? CancelledDate { get; set; }
+
+    public string? CancelReason { get; set; }
 }

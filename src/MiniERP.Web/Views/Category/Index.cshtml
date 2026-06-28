@@ -4,13 +4,8 @@
     ViewData["Title"] = "Kategoriler";
 }
 
-<div class="list-page-header">
-    <div>
-        <span class="panel-label">Ürün Sınıflandırma</span>
-        <h2>Kategoriler</h2>
-        <p>Ürünlerin bağlı olduğu kategori kayıtlarını yönetin.</p>
-    </div>
-    <a asp-action="Create" class="btn btn-primary">Yeni Ekle</a>
+<div class="list-page-header justify-content-end">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCategoryModal">Yeni Ekle</button>
 </div>
 
 <div class="panel-card">
@@ -39,6 +34,34 @@
                 }
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createCategoryModalLabel">Yeni Kategori</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="categoryCreateName" class="form-label">Kategori Adı</label>
+                        <input id="categoryCreateName" name="Name" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoryCreateDescription" class="form-label">Açıklama</label>
+                        <textarea id="categoryCreateDescription" name="Description" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

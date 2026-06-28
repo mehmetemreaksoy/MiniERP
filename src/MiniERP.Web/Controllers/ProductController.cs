@@ -37,6 +37,17 @@ public class ProductController : Controller
         return View();
     }
 
+    public IActionResult Passive()
+    {
+        var products = _context.Products
+            .Include(p => p.Category)
+            .Where(p => p.IsDeleted)
+            .OrderByDescending(p => p.DeletedDate)
+            .ToList();
+
+        return View(products);
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Product product)
@@ -130,6 +141,30 @@ public class ProductController : Controller
             $"Ürün pasife alındı: {product.Name}");
 
         return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Restore(int id)
+    {
+        var product = _context.Products.Find(id);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        product.IsDeleted = false;
+        product.DeletedDate = null;
+        _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Restore",
+            "Product",
+            product.Id,
+            $"Ürün yeniden aktifleştirildi: {product.Name}");
+
+        return RedirectToAction(nameof(Passive));
     }
 
     private void LoadCategories()

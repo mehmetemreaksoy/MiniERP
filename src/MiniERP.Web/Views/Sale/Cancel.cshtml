@@ -1,0 +1,72 @@
+@model Sale
+
+@{
+    ViewData["Title"] = "Satış İptal";
+}
+
+<div class="list-page-header">
+    <div>
+        <span class="panel-label">Satış Yönetimi</span>
+        <h2>Satış İptal</h2>
+        <p>Satışı iptal edin ve satış miktarını ürün stoğuna geri ekleyin.</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Satışlara Dön</a>
+</div>
+
+<div class="panel-card">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="table-responsive">
+                <table class="table erp-table mb-0">
+                    <tbody>
+                        <tr>
+                            <th>Müşteri</th>
+                            <td><strong>@Model.Customer?.Name</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Ürün</th>
+                            <td>@Model.Product?.Name</td>
+                        </tr>
+                        <tr>
+                            <th>Adet</th>
+                            <td>@Model.Quantity</td>
+                        </tr>
+                        <tr>
+                            <th>Toplam Tutar</th>
+                            <td>@Model.TotalPrice.ToString("N2")</td>
+                        </tr>
+                        <tr>
+                            <th>Satış Tarihi</th>
+                            <td>@Model.SaleDate.ToString("dd.MM.yyyy HH:mm")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            @if (Model.Status == "Cancelled")
+            {
+                <div class="alert alert-warning mb-0">
+                    Bu satış zaten iptal edilmiş.
+                </div>
+            }
+            else
+            {
+                <form asp-action="Cancel" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <label for="cancelReason" class="form-label">İptal Nedeni</label>
+                        <textarea id="cancelReason" name="cancelReason" class="form-control" rows="6"></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
+                        <button type="submit" class="btn btn-warning">Satışı İptal Et</button>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>

@@ -1,16 +1,12 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model List<Sale>
 
 @{
     ViewData["Title"] = "Satışlar";
 }
 
-<div class="list-page-header">
-    <div>
-        <span class="panel-label">Satış Yönetimi</span>
-        <h2>Satışlar</h2>
-        <p>Müşteri bazlı ürün satışlarını ve toplam tutarları görüntüleyin.</p>
-    </div>
-    <a asp-action="Create" class="btn btn-primary">Yeni Ekle</a>
+<div class="list-page-header justify-content-end">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSaleModal">Yeni Ekle</button>
 </div>
 
 <div class="panel-card">
@@ -23,6 +19,7 @@
                     <th>Miktar</th>
                     <th>Birim Fiyat</th>
                     <th>Toplam Tutar</th>
+                    <th>Durum</th>
                     <th>Satış Tarihi</th>
                     <th class="text-end">İşlemler</th>
                 </tr>
@@ -36,9 +33,21 @@
                         <td>@sale.Quantity</td>
                         <td>@sale.UnitPrice.ToString("N2")</td>
                         <td><strong>@sale.TotalPrice.ToString("N2")</strong></td>
+                        <td>
+                            <span class="status-pill @(sale.Status == "Active" ? "success" : "warning")">
+                                @(sale.Status == "Active" ? "Aktif" : "İptal")
+                            </span>
+                        </td>
                         <td>@sale.SaleDate.ToShortDateString()</td>
                         <td class="text-end">
-                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteSaleModal-@sale.Id">Sil</button>
+                            @if (sale.Status == "Active")
+                            {
+                                <a asp-action="Cancel" asp-route-id="@sale.Id" class="btn btn-sm btn-outline-warning">İptal Et</a>
+                            }
+                            else
+                            {
+                                <span class="status-pill warning">İptal Edildi</span>
+                            }
                         </td>
                     </tr>
                 }
@@ -47,27 +56,47 @@
     </div>
 </div>
 
-@foreach (var sale in Model)
-{
-    <div class="modal fade" id="deleteSaleModal-@sale.Id" tabindex="-1" aria-labelledby="deleteSaleModalLabel-@sale.Id" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form asp-action="Delete" method="post">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteSaleModalLabel-@sale.Id">Satış Sil</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+<div class="modal fade" id="createSaleModal" tabindex="-1" aria-labelledby="createSaleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createSaleModalLabel">Yeni Satış</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="saleCreateCustomer" class="form-label">Cari</label>
+                        <select id="saleCreateCustomer" name="CustomerId" class="form-select">
+                            <option value="">Cari seçin</option>
+                            @foreach (SelectListItem customer in ViewBag.Customers)
+                            {
+                                <option value="@customer.Value">@customer.Text</option>
+                            }
+                        </select>
                     </div>
-                    <div class="modal-body">
-                        <input type="hidden" name="id" value="@sale.Id" />
-                        <p class="mb-1">Bu satış kaydını silmek istediğinize emin misiniz?</p>
-                        <strong>@sale.Customer?.Name - @sale.Product?.Name / @sale.TotalPrice.ToString("N2")</strong>
+
+                    <div class="mb-3">
+                        <label for="saleCreateProduct" class="form-label">Ürün</label>
+                        <select id="saleCreateProduct" name="ProductId" class="form-select">
+                            <option value="">Ürün seçin</option>
+                            @foreach (SelectListItem product in ViewBag.Products)
+                            {
+                                <option value="@product.Value">@product.Text</option>
+                            }
+                        </select>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
-                        <button type="submit" class="btn btn-danger">Sil</button>
+
+                    <div class="mb-3">
+                        <label for="saleCreateQuantity" class="form-label">Miktar</label>
+                        <input id="saleCreateQuantity" name="Quantity" class="form-control" />
                     </div>
-                </form>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
         </div>
     </div>
-}
+</div>

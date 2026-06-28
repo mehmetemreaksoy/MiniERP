@@ -1,16 +1,12 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model List<StockMovement>
 
 @{
     ViewData["Title"] = "Stok Hareketleri";
 }
 
-<div class="list-page-header">
-    <div>
-        <span class="panel-label">Depo Operasyonları</span>
-        <h2>Stok Hareketleri</h2>
-        <p>Ürün giriş ve çıkış hareketlerini takip edin.</p>
-    </div>
-    <a asp-action="Create" class="btn btn-primary">Yeni Ekle</a>
+<div class="list-page-header justify-content-end">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createStockMovementModal">Yeni Ekle</button>
 </div>
 
 <div class="panel-card">
@@ -46,6 +42,56 @@
                 }
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="modal fade" id="createStockMovementModal" tabindex="-1" aria-labelledby="createStockMovementModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createStockMovementModalLabel">Yeni Stok Hareketi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="stockMovementCreateProduct" class="form-label">Ürün</label>
+                        <select id="stockMovementCreateProduct" name="ProductId" class="form-select">
+                            <option value="">Ürün seçin</option>
+                            @foreach (SelectListItem product in ViewBag.Products)
+                            {
+                                <option value="@product.Value">@product.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="stockMovementCreateType" class="form-label">Hareket Tipi</label>
+                        <select id="stockMovementCreateType" name="MovementType" class="form-select">
+                            <option value="">Hareket tipi seçin</option>
+                            @foreach (SelectListItem movementType in ViewBag.MovementTypes)
+                            {
+                                <option value="@movementType.Value">@movementType.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="stockMovementCreateQuantity" class="form-label">Miktar</label>
+                        <input id="stockMovementCreateQuantity" name="Quantity" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="stockMovementCreateDescription" class="form-label">Açıklama</label>
+                        <textarea id="stockMovementCreateDescription" name="Description" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

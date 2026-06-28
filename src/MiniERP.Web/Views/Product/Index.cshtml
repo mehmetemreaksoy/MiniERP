@@ -5,13 +5,11 @@
     ViewData["Title"] = "Ürünler";
 }
 
-<div class="list-page-header">
-    <div>
-        <span class="panel-label">Stok Yönetimi</span>
-        <h2>Ürünler</h2>
-        <p>Stokta takip edilen ürünleri, fiyatları ve kritik stok seviyelerini yönetin.</p>
+<div class="list-page-header justify-content-end">
+    <div class="d-flex gap-2">
+        <a asp-action="Passive" class="btn btn-outline-secondary">Pasif Ürünler</a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProductModal">Yeni Ekle</button>
     </div>
-    <a asp-action="Create" class="btn btn-primary">Yeni Ekle</a>
 </div>
 
 <div class="panel-card">
@@ -50,6 +48,62 @@
                 }
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createProductModalLabel">Yeni Ürün</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="productCreateName" class="form-label">Ürün Adı</label>
+                            <input id="productCreateName" name="Name" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="productCreateCategory" class="form-label">Kategori</label>
+                            <select id="productCreateCategory" name="CategoryId" class="form-select">
+                                <option value="">Kategori seçin</option>
+                                @foreach (SelectListItem category in ViewBag.Categories)
+                                {
+                                    <option value="@category.Value">@category.Text</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="productCreatePrice" class="form-label">Fiyat</label>
+                            <input id="productCreatePrice" name="Price" class="form-control" type="text" inputmode="decimal" autocomplete="off" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="productCreateStock" class="form-label">Stok</label>
+                            <input id="productCreateStock" name="StockQuantity" class="form-control" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="productCreateCriticalStock" class="form-label">Kritik Stok</label>
+                            <input id="productCreateCriticalStock" name="CriticalStockLevel" class="form-control" />
+                        </div>
+
+                        <div class="col-12">
+                            <label for="productCreateDescription" class="form-label">Açıklama</label>
+                            <textarea id="productCreateDescription" name="Description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
