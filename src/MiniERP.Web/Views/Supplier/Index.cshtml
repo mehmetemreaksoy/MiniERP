@@ -5,7 +5,10 @@
 }
 
 <div class="list-page-header justify-content-end">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSupplierModal">Yeni Ekle</button>
+    <div class="d-flex gap-2">
+        <a asp-action="Passive" class="btn btn-outline-secondary">Pasif Tedarikçiler</a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSupplierModal">Yeni Ekle</button>
+    </div>
 </div>
 
 <div class="panel-card">
@@ -114,9 +117,6 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="Id" value="@supplier.Id" />
-                        <input type="hidden" name="CreatedDate" value="@supplier.CreatedDate" />
-                        <input type="hidden" name="IsDeleted" value="@supplier.IsDeleted" />
-                        <input type="hidden" name="DeletedDate" value="@supplier.DeletedDate" />
 
                         <div class="row g-3">
                             <div class="col-md-6">

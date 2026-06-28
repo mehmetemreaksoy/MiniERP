@@ -1,0 +1,55 @@
+@model List<Supplier>
+
+@{
+    ViewData["Title"] = "Pasif Tedarikçiler";
+}
+
+<div class="list-page-header justify-content-end">
+    <a asp-action="Index" class="btn btn-outline-secondary">Aktif Tedarikçilere Dön</a>
+</div>
+
+<div class="panel-card">
+    <div class="table-responsive">
+        <table class="table erp-table mb-0">
+            <thead>
+                <tr>
+                    <th>Tedarikçi Adı</th>
+                    <th>Yetkili Kişi</th>
+                    <th>E-posta</th>
+                    <th>Telefon</th>
+                    <th>Vergi No</th>
+                    <th>Silinme Tarihi</th>
+                    <th class="text-end">İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="empty-state">Pasif tedarikçi bulunamadı.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var supplier in Model)
+                    {
+                        <tr>
+                            <td><strong>@supplier.Name</strong></td>
+                            <td>@supplier.ContactPerson</td>
+                            <td>@supplier.Email</td>
+                            <td>@supplier.Phone</td>
+                            <td>@supplier.TaxNumber</td>
+                            <td>@supplier.DeletedDate?.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="text-end">
+                                <form asp-action="Restore" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@supplier.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Aktifleştir</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

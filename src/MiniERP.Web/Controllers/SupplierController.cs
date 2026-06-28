@@ -27,6 +27,16 @@ public class SupplierController : Controller
         return View(suppliers);
     }
 
+    public IActionResult Passive()
+    {
+        var suppliers = _context.Suppliers
+            .Where(s => s.IsDeleted)
+            .OrderByDescending(s => s.DeletedDate)
+            .ToList();
+
+        return View(suppliers);
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Supplier supplier)
@@ -56,6 +66,13 @@ public class SupplierController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Edit(Supplier supplier)
     {
+        var existingSupplier = _context.Suppliers.Find(supplier.Id);
+
+        if (existingSupplier == null)
+        {
+            return NotFound();
+        }
+
         if (!ModelState.IsValid)
         {
             var suppliers = _context.Suppliers
@@ -65,14 +82,20 @@ public class SupplierController : Controller
             return View(nameof(Index), suppliers);
         }
 
-        _context.Suppliers.Update(supplier);
+        existingSupplier.Name = supplier.Name;
+        existingSupplier.ContactPerson = supplier.ContactPerson;
+        existingSupplier.Email = supplier.Email;
+        existingSupplier.Phone = supplier.Phone;
+        existingSupplier.Address = supplier.Address;
+        existingSupplier.TaxNumber = supplier.TaxNumber;
+
         _context.SaveChanges();
 
         _auditLogService.Log(
             "Edit",
             "Supplier",
-            supplier.Id,
-            $"Tedarikçi güncellendi: {supplier.Name}");
+            existingSupplier.Id,
+            $"Tedarikçi güncellendi: {existingSupplier.Name}");
 
         return RedirectToAction(nameof(Index));
     }
@@ -99,5 +122,29 @@ public class SupplierController : Controller
             $"Tedarikçi silindi: {supplier.Name}");
 
         return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Restore(int id)
+    {
+        var supplier = _context.Suppliers.Find(id);
+
+        if (supplier == null)
+        {
+            return NotFound();
+        }
+
+        supplier.IsDeleted = false;
+        supplier.DeletedDate = null;
+        _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Restore",
+            "Supplier",
+            supplier.Id,
+            $"Tedarikçi yeniden aktifleştirildi: {supplier.Name}");
+
+        return RedirectToAction(nameof(Passive));
     }
 }
