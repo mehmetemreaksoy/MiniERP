@@ -22,6 +22,8 @@ public class AppDbContext : IdentityDbContext
 
     public DbSet<Sale> Sales { get; set; }
 
+    public DbSet<Purchase> Purchases { get; set; }
+
     public DbSet<AuditLog> AuditLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,6 +40,14 @@ public class AppDbContext : IdentityDbContext
 
         modelBuilder.Entity<Sale>()
             .Property(s => s.TotalPrice)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<Purchase>()
+            .Property(p => p.UnitPrice)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<Purchase>()
+            .Property(p => p.TotalPrice)
             .HasPrecision(18, 2);
     }
 }

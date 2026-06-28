@@ -27,4 +27,6 @@ public class Product
     public List<StockMovement> StockMovements { get; set; } = new();
 
     public List<Sale> Sales { get; set; } = new();
+
+    public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
 }

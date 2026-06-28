@@ -21,4 +21,6 @@ public class Supplier
     public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     public DateTime? DeletedDate { get; set; }
+
+    public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
 }

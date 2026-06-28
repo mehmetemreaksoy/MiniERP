@@ -1,0 +1,105 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model List<Purchase>
+
+@{
+    ViewData["Title"] = "Satın Almalar";
+}
+
+<div class="list-page-header justify-content-end">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPurchaseModal">Yeni Ekle</button>
+</div>
+
+<div class="panel-card">
+    <div class="table-responsive">
+        <table class="table erp-table mb-0">
+            <thead>
+                <tr>
+                    <th>Tedarikçi</th>
+                    <th>Ürün</th>
+                    <th>Miktar</th>
+                    <th>Birim Fiyat</th>
+                    <th>Toplam Tutar</th>
+                    <th>Durum</th>
+                    <th>Satın Alma Tarihi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="empty-state">Satın alma kaydı bulunamadı.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var purchase in Model)
+                    {
+                        <tr>
+                            <td><strong>@purchase.Supplier?.Name</strong></td>
+                            <td>@purchase.Product?.Name</td>
+                            <td>@purchase.Quantity</td>
+                            <td>@purchase.UnitPrice.ToString("N2")</td>
+                            <td><strong>@purchase.TotalPrice.ToString("N2")</strong></td>
+                            <td>
+                                <span class="status-pill @(purchase.Status == "Active" ? "success" : "warning")">
+                                    @(purchase.Status == "Active" ? "Aktif" : "İptal")
+                                </span>
+                            </td>
+                            <td>@purchase.PurchaseDate.ToShortDateString()</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="createPurchaseModal" tabindex="-1" aria-labelledby="createPurchaseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createPurchaseModalLabel">Yeni Satın Alma</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="purchaseCreateSupplier" class="form-label">Tedarikçi</label>
+                        <select id="purchaseCreateSupplier" name="SupplierId" class="form-select">
+                            <option value="">Tedarikçi seçin</option>
+                            @foreach (SelectListItem supplier in ViewBag.Suppliers)
+                            {
+                                <option value="@supplier.Value">@supplier.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="purchaseCreateProduct" class="form-label">Ürün</label>
+                        <select id="purchaseCreateProduct" name="ProductId" class="form-select">
+                            <option value="">Ürün seçin</option>
+                            @foreach (SelectListItem product in ViewBag.Products)
+                            {
+                                <option value="@product.Value">@product.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="purchaseCreateQuantity" class="form-label">Miktar</label>
+                        <input id="purchaseCreateQuantity" name="Quantity" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="purchaseCreateUnitPrice" class="form-label">Birim Fiyat</label>
+                        <input id="purchaseCreateUnitPrice" name="UnitPrice" class="form-control" type="text" inputmode="decimal" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
