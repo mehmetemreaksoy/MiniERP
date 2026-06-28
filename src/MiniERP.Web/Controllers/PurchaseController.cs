@@ -79,6 +79,68 @@ public class PurchaseController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    public IActionResult Cancel(int id)
+    {
+        var purchase = _context.Purchases
+            .Include(p => p.Supplier)
+            .Include(p => p.Product)
+            .FirstOrDefault(p => p.Id == id);
+
+        if (purchase == null)
+        {
+            return NotFound();
+        }
+
+        return View(purchase);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Cancel(int id, string? cancelReason)
+    {
+        var purchase = _context.Purchases
+            .Include(p => p.Supplier)
+            .Include(p => p.Product)
+            .FirstOrDefault(p => p.Id == id);
+
+        if (purchase == null)
+        {
+            return NotFound();
+        }
+
+        if (purchase.Status == "Cancelled")
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        if (purchase.Product == null)
+        {
+            ModelState.AddModelError(string.Empty, "Ürün bulunamadı.");
+            return View(purchase);
+        }
+
+        if (purchase.Product.StockQuantity < purchase.Quantity)
+        {
+            ModelState.AddModelError(string.Empty, "Ürün stoğu satın alma miktarından düşük olduğu için iptal edilemez.");
+            return View(purchase);
+        }
+
+        purchase.Product.StockQuantity -= purchase.Quantity;
+        purchase.Status = "Cancelled";
+        purchase.CancelledDate = DateTime.Now;
+        purchase.CancelReason = cancelReason;
+
+        _context.SaveChanges();
+
+        _auditLogService.Log(
+            "Cancel",
+            "Purchase",
+            purchase.Id,
+            "Satın alma iptal edildi. Stok geri düşüldü.");
+
+        return RedirectToAction(nameof(Index));
+    }
+
     private void LoadSuppliers()
     {
         ViewBag.Suppliers = new SelectList(_context.Suppliers.Where(s => !s.IsDeleted).ToList(), "Id", "Name");
