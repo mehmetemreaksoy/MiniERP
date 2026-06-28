@@ -1,0 +1,183 @@
+@model List<Supplier>
+
+@{
+    ViewData["Title"] = "Tedarikçiler";
+}
+
+<div class="list-page-header justify-content-end">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSupplierModal">Yeni Ekle</button>
+</div>
+
+<div class="panel-card">
+    <div class="table-responsive">
+        <table class="table erp-table mb-0">
+            <thead>
+                <tr>
+                    <th>Tedarikçi Adı</th>
+                    <th>Yetkili Kişi</th>
+                    <th>E-posta</th>
+                    <th>Telefon</th>
+                    <th>Vergi No</th>
+                    <th>Oluşturma Tarihi</th>
+                    <th class="text-end">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="empty-state">Tedarikçi bulunamadı.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var supplier in Model)
+                    {
+                        <tr>
+                            <td><strong>@supplier.Name</strong></td>
+                            <td>@supplier.ContactPerson</td>
+                            <td>@supplier.Email</td>
+                            <td>@supplier.Phone</td>
+                            <td>@supplier.TaxNumber</td>
+                            <td>@supplier.CreatedDate.ToShortDateString()</td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editSupplierModal-@supplier.Id">Düzenle</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteSupplierModal-@supplier.Id">Sil</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="createSupplierModal" tabindex="-1" aria-labelledby="createSupplierModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createSupplierModalLabel">Yeni Tedarikçi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="supplierCreateName" class="form-label">Tedarikçi Adı</label>
+                            <input id="supplierCreateName" name="Name" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="supplierCreateContactPerson" class="form-label">Yetkili Kişi</label>
+                            <input id="supplierCreateContactPerson" name="ContactPerson" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="supplierCreateEmail" class="form-label">E-posta</label>
+                            <input id="supplierCreateEmail" name="Email" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="supplierCreatePhone" class="form-label">Telefon</label>
+                            <input id="supplierCreatePhone" name="Phone" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="supplierCreateTaxNumber" class="form-label">Vergi No</label>
+                            <input id="supplierCreateTaxNumber" name="TaxNumber" class="form-control" />
+                        </div>
+
+                        <div class="col-12">
+                            <label for="supplierCreateAddress" class="form-label">Adres</label>
+                            <textarea id="supplierCreateAddress" name="Address" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@foreach (var supplier in Model)
+{
+    <div class="modal fade" id="editSupplierModal-@supplier.Id" tabindex="-1" aria-labelledby="editSupplierModalLabel-@supplier.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <form asp-action="Edit" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editSupplierModalLabel-@supplier.Id">Tedarikçi Düzenle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="Id" value="@supplier.Id" />
+                        <input type="hidden" name="CreatedDate" value="@supplier.CreatedDate" />
+                        <input type="hidden" name="IsDeleted" value="@supplier.IsDeleted" />
+                        <input type="hidden" name="DeletedDate" value="@supplier.DeletedDate" />
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="supplierName-@supplier.Id" class="form-label">Tedarikçi Adı</label>
+                                <input id="supplierName-@supplier.Id" name="Name" class="form-control" value="@supplier.Name" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="supplierContactPerson-@supplier.Id" class="form-label">Yetkili Kişi</label>
+                                <input id="supplierContactPerson-@supplier.Id" name="ContactPerson" class="form-control" value="@supplier.ContactPerson" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="supplierEmail-@supplier.Id" class="form-label">E-posta</label>
+                                <input id="supplierEmail-@supplier.Id" name="Email" class="form-control" value="@supplier.Email" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="supplierPhone-@supplier.Id" class="form-label">Telefon</label>
+                                <input id="supplierPhone-@supplier.Id" name="Phone" class="form-control" value="@supplier.Phone" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="supplierTaxNumber-@supplier.Id" class="form-label">Vergi No</label>
+                                <input id="supplierTaxNumber-@supplier.Id" name="TaxNumber" class="form-control" value="@supplier.TaxNumber" />
+                            </div>
+
+                            <div class="col-12">
+                                <label for="supplierAddress-@supplier.Id" class="form-label">Adres</label>
+                                <textarea id="supplierAddress-@supplier.Id" name="Address" class="form-control">@supplier.Address</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteSupplierModal-@supplier.Id" tabindex="-1" aria-labelledby="deleteSupplierModalLabel-@supplier.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-action="Delete" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteSupplierModalLabel-@supplier.Id">Tedarikçi Sil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="@supplier.Id" />
+                        <p class="mb-1">Bu tedarikçiyi pasife almak istediğinize emin misiniz?</p>
+                        <strong>@supplier.Name</strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

@@ -16,6 +16,8 @@ public class AppDbContext : IdentityDbContext
 
     public DbSet<Customer> Customers { get; set; }
 
+    public DbSet<Supplier> Suppliers { get; set; }
+
     public DbSet<StockMovement> StockMovements { get; set; }
 
     public DbSet<Sale> Sales { get; set; }
