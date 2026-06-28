@@ -20,6 +20,10 @@ public class Product
 
     public DateTime CreatedDate { get; set; } = DateTime.Now;
 
+    public bool IsDeleted { get; set; }
+
+    public DateTime? DeletedDate { get; set; }
+
     public List<StockMovement> StockMovements { get; set; } = new();
 
     public List<Sale> Sales { get; set; } = new();

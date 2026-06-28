@@ -22,7 +22,10 @@ public class ProductController : Controller
 
     public IActionResult Index()
     {
-        var products = _context.Products.Include(p => p.Category).ToList();
+        var products = _context.Products
+            .Include(p => p.Category)
+            .Where(p => !p.IsDeleted)
+            .ToList();
         LoadCategories();
 
         return View(products);
@@ -116,14 +119,15 @@ public class ProductController : Controller
             return NotFound();
         }
 
-        _context.Products.Remove(product);
+        product.IsDeleted = true;
+        product.DeletedDate = DateTime.Now;
         _context.SaveChanges();
 
         _auditLogService.Log(
             "Delete",
             "Product",
             product.Id,
-            $"Ürün silindi: {product.Name}");
+            $"Ürün pasife alındı: {product.Name}");
 
         return RedirectToAction(nameof(Index));
     }
